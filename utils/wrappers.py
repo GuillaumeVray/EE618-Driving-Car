@@ -3,6 +3,24 @@ import numpy as np
 from sb3_contrib.common.wrappers import TimeFeatureWrapper  # noqa: F401 (backward compatibility)
 from scipy.signal import iirfilter, sosfilt, zpk2sos
 
+import torch
+from torch import Tensor
+import torch.nn as nn
+from kornia.augmentation import ColorJitter, RandomChannelShuffle, RandomHorizontalFlip, RandomThinPlateSpline, Resize
+
+
+class AugmentationWrapper(gym.Wrapper):
+    """Performs Data augmentation on observations
+    """
+    def __init__(self, env: gym.Env) -> None:
+        super().__init__(env)
+
+
+    def step(self, action):
+        obs, reward, done, info = self.env.step(action)
+
+        return obs, reward, done, info
+
 
 class DoneOnSuccessWrapper(gym.Wrapper):
     """

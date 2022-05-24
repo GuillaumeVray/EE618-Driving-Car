@@ -1,3 +1,22 @@
+
+donkey-generated-track-v0:
+  n_timesteps : !!float 1e6
+  policy : "CnnPolicy"
+  learning_rate : !!float 3e-4
+  batch_size : 64
+  ent_coef : 0.01
+  vf_coef : 0.01
+  gamma : 0.99
+  env_wrapper:
+    - gym.wrappers.time_limit.TimeLimit:
+        max_episode_steps : 1000
+    - utils.wrappers.AugmentationWrapper
+    - stable_baselines3.common.monitor.Monitor:
+        filename: None
+  use_sde : true
+  sde_sample_freq : 16
+
+
 atari:
   env_wrapper:
     - stable_baselines3.common.atari_wrappers.AtariWrapper

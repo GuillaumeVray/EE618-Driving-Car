@@ -26,7 +26,7 @@ def supply_defaults(conf: Dict[str, Any]) -> None:
         ("cam_resolution", (120, 160, 3)),
         ("log_level", logging.INFO),
         ("host", "localhost"),
-        ("port", 9096),
+        ("port", 9091),
     ]
 
     for key, val in defaults:

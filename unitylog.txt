@@ -20,60 +20,50 @@ L_EXT_texture_lod_bias GL_EXT_texture_mirror_clamp GL_EXT_texture_object GL_EXT_
 blend_equation_advanced_coherent GL_NVX_blend_equation_advanced_multi_draw_buffers GL_NV_blend_minmax_factor GL_NV_blend_square GL_NV_clip_space_w_scaling GL_NV_command_list GL_NV_compute_program5 GL_NV_conditional_render GL_NV_conservative_raster GL_NV_conservative_raster_dilate GL_NV_conservative_raster_pre_snap_triangles GL_NV_copy_depth_to_color GL_NV_copy_image GL_NV_depth_buffer_float GL_NV_depth_clamp GL_NV_draw_texture GL_NV_draw_vulkan_image GL_NV_ES1_1_compatibility GL_NV_ES3_1_compatibility GL_NV_explicit_multisample GL_NV_feature_query GL_NV_fence GL_NV_fill_rectangle GL_NV_float_buffer GL_NV_fog_distance GL_NV_fragment_coverage_to_color GL_NV_fragment_program GL_NV_fragment_program_option GL_NV_fragment_program2 GL_NV_fragment_shader_interlock GL_NV_framebuffer_mixed_samples GL_NV_framebuffer_multisample_coverage GL_NV_geometry_shader4 GL_NV_geometry_shader_passthrough GL_NV_gpu_program4 GL_NV_internalformat_sample_query GL_NV_gpu_program4_1 GL_NV_gpu_program5 GL_NV_gpu_program5_mem_extended GL_
 NV_gpu_program_fp64 GL_NV_gpu_shader5 GL_NV_half_float GL_NV_light_max_exponent GL_NV_memory_attachment GL_NV_multisample_coverage GL_NV_multisample_filter_hint GL_NV_occlusion_query GL_NV_packed_depth_stencil GL_NV_parameter_buffer_object GL_NV_parameter_buffer_object2 GL_NV_path_rendering GL_NV_path_rendering_shared_edge GL_NV_pixel_data_range GL_NV_point_sprite GL_NV_primitive_restart GL_NV_query_resource GL_NV_query_resource_tag GL_NV_register_combiners GL_NV_register_combiners2 GL_NV_sample_locations GL_NV_sample_mask_override_coverage GL_NV_shader_atomic_counters GL_NV_shader_atomic_float GL_NV_shader_atomic_float64 GL_NV_shader_atomic_fp16_vector GL_NV_shader_atomic_int64 GL_NV_shader_buffer_load GL_NV_shader_storage_buffer_object GL_NV_shader_subgroup_partitioned GL_NV_stereo_view_rendering GL_NV_texgen_reflection GL_NV_texture_barrier GL_NV_texture_compression_vtc GL_NV_texture_env_combine4 GL_NV_texture_multisample GL_NV_texture_rectangle GL_NV_texture_rectangle_compressed GL_NV_texture_shader GL_N
 V_texture_shader2 GL_NV_texture_shader3 GL_NV_transform_feedback GL_NV_transform_feedback2 GL_NV_uniform_buffer_unified_memory GL_NV_vdpau_interop GL_NV_vdpau_interop2 GL_NV_vertex_array_range GL_NV_vertex_array_range2 GL_NV_vertex_attrib_integer_64bit GL_NV_vertex_buffer_unified_memory GL_NV_vertex_program GL_NV_vertex_program1_1 GL_NV_vertex_program2 GL_NV_vertex_program2_option GL_NV_vertex_program3 GL_NV_viewport_array2 GL_NV_viewport_swizzle GL_NVX_conditional_render GL_NV_gpu_multicast GL_NVX_progress_fence GL_NVX_gpu_memory_info GL_NVX_nvenc_interop GL_NV_shader_thread_group GL_NV_shader_thread_shuffle GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_OVR_multiview GL_OVR_multiview2 GL_SGIS_generate_mipmap GL_SGIS_texture_lod GL_SGIX_depth_texture GL_SGIX_shadow GL_SUN_slice_accum
-OPENGL LOG: Creating OpenGL 4.5 graphics device ; Context level  <OpenGL 4.5> ; Context handle 6104056
+OPENGL LOG: Creating OpenGL 4.5 graphics device ; Context level  <OpenGL 4.5> ; Context handle 31933528
 Begin MonoManager ReloadAssembly
-- Completed reload, in  0.059 seconds
+- Completed reload, in  0.062 seconds
 Default vsync count 0
 requesting resize 1600 x 1163
 resizing window to 1600 x 1163
 Desktop is 1600 x 1200 @ 60 Hz
-UnloadTime: 1.151066 ms
+UnloadTime: 1.267565 ms
 SDSandbox Server starting.
 
-Server Listening on: 0.0.0.0:9096
-
-Waiting for a connection...
+SocketException: Address already in use
+  at System.Net.Sockets.Socket.Bind (System.Net.EndPoint localEP) [0x00043] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at tk.TcpServer.Bind (System.String ip, System.Int32 port) [0x00022] in <75acdb993dd548269dfde03c8b031bb2>:0 
+  at tk.TcpServer.Run (System.String ip, System.Int32 port) [0x00000] in <75acdb993dd548269dfde03c8b031bb2>:0 
+  at SandboxServer.Start () [0x0005e] in <75acdb993dd548269dfde03c8b031bb2>:0 
 
 SDSandbox Server starting.
 
-Server Listening on: 0.0.0.0:9092
-
-Waiting for a connection...
+SocketException: Address already in use
+  at System.Net.Sockets.Socket.Bind (System.Net.EndPoint localEP) [0x00043] in <3df7f9ca50404bbc8bd4e7b954e70293>:0 
+  at tk.TcpServer.Bind (System.String ip, System.Int32 port) [0x00022] in <75acdb993dd548269dfde03c8b031bb2>:0 
+  at tk.TcpServer.Run (System.String ip, System.Int32 port) [0x00000] in <75acdb993dd548269dfde03c8b031bb2>:0 
+  at SandboxServer.Start () [0x0005e] in <75acdb993dd548269dfde03c8b031bb2>:0 
 
 Setting up 10 worker threads for Enlighten.
-  Thread -> id: 7f2c075fe640 -> priority: 1 
-  Thread -> id: 7f2c06dfd640 -> priority: 1 
-  Thread -> id: 7f2c065fc640 -> priority: 1 
-  Thread -> id: 7f2c056e1640 -> priority: 1 
-  Thread -> id: 7f2c04ee0640 -> priority: 1 
-  Thread -> id: 7f2bfbfff640 -> priority: 1 
-  Thread -> id: 7f2bfb7fe640 -> priority: 1 
-  Thread -> id: 7f2bfaffd640 -> priority: 1 
-  Thread -> id: 7f2bfa7fc640 -> priority: 1 
-  Thread -> id: 7f2bf9ffb640 -> priority: 1 
-Waiting for a connection...
+  Thread -> id: 7ffa777fe640 -> priority: 1 
+  Thread -> id: 7ffa76ffd640 -> priority: 1 
+  Thread -> id: 7ffa767fc640 -> priority: 1 
+  Thread -> id: 7ffa75ffb640 -> priority: 1 
+  Thread -> id: 7ffa757fa640 -> priorityWaiting for a connection...
 
 client connected.
-
-generated_track
-
-loaded scene
-
-Unloading 8 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 14.991239 ms
-JustOne removing instance.MainThDisp
-
-JustOne removing instance.SandboxServer
-
-loading: racePi2
-
-JustOne removing instance.SandboxPrivateAPIServer
 
 Added timer
 
 car loaded.
 
+No delegates for msg type: connected
 
-Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 3349.
-Total: 3.224256 ms (FindLiveObjects: 0.188954 ms CreateObjectMapping: 0.053005 ms MarkObjects: 1.599735 ms  DeleteObjects: 1.382248 ms)
+removed timer
 
+removed split screen camera
+
+Removed car
+
+-> priority: 1 
+  Thread -> id: 7ffa72ff5640 -> priority: 1 

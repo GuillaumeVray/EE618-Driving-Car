@@ -1,25 +1,74 @@
 import gym
 import numpy as np
+import matplotlib.pyplot as plt
+
+from PIL import Image
 from sb3_contrib.common.wrappers import TimeFeatureWrapper  # noqa: F401 (backward compatibility)
 from scipy.signal import iirfilter, sosfilt, zpk2sos
 
-import torch
-from torch import Tensor
-import torch.nn as nn
-from kornia.augmentation import ColorJitter, RandomChannelShuffle, RandomHorizontalFlip, RandomThinPlateSpline, Resize
-
+from .randaugment import *
 
 class AugmentationWrapper(gym.Wrapper):
     """Performs Data augmentation on observations
     """
-    def __init__(self, env: gym.Env) -> None:
+    def __init__(self, env: gym.Env, rand_aug_frequency : int, N: int, M:int, test : bool = False) -> None:
         super().__init__(env)
 
+        self.n_samples = 0
+        self.N, self.M = N, M
+        self.rand_aug_frequency = rand_aug_frequency
+        self.test = test
+
+        self.pool = [
+            (AutoContrast, 0, 1),
+            (Equalize, 0, 1),
+            (Invert, 0, 1),
+            # # (Rotate, 0, 30),
+            (Posterize, 0, 4),
+            (Solarize, 0, 256),
+            (SolarizeAdd, 0, 110),
+            (Color, 0.1, 1.9),
+            (Contrast, 0.1, 1.9),
+            (Brightness, 0.1, 1.9),
+            (Sharpness, 0.1, 1.9),
+            # (ShearX, 0., 0.3),
+            # (ShearY, 0., 0.3),
+            (Identity, 0., 1.),
+            (CutoutAbs, 0, 40),
+            (TranslateXabs, 0., 100),
+            (TranslateYabs, 0., 100),
+        ]
+
+        self.set_augmentation()
+
+    def reset(self):
+        self.n_samples = 0
+        return super().reset()
+
+    def set_augmentation(self):
+        self.augmenter = random.choices(self.pool, k=self.N)
+
+    def augment(self, images):
+        for op, minval, maxval in self.augmenter:
+            val = (float(self.M) / 30) * float(maxval - minval) + minval
+            images = op(images, val)
+        return images
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
 
-        return obs, reward, done, info
+        if self.test:
+            return obs, reward, done, info
+        obs_img = Image.fromarray(obs)
+        if self.n_samples % self.rand_aug_frequency == 0:
+            self.set_augmentation()
+            self.n_samples = 0
+        self.n_samples += 1
+
+        aug_obs = self.augment(obs_img)
+        aug_obs = np.array(aug_obs)
+
+        return aug_obs, reward, done, info
 
 
 class DoneOnSuccessWrapper(gym.Wrapper):

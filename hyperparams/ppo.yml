@@ -1,6 +1,6 @@
 
 donkey-generated-track-v0:
-  n_timesteps : !!float 5e5
+  n_timesteps : !!float 2e6
   policy : "CnnPolicy"
   learning_rate : !!float 3e-4
   batch_size : 64
@@ -9,13 +9,10 @@ donkey-generated-track-v0:
   gamma : 0.99
   env_wrapper:
     - gym.wrappers.time_limit.TimeLimit:
-        max_episode_steps : 1000
+        max_episode_steps : 10000
     - utils.wrappers.AugmentationWrapper:
-        rand_aug_frequency: 2048
-        N: 1
-        M: 10
-    - stable_baselines3.common.monitor.Monitor:
-        filename: None
+        rand_aug_frequency: 64
+        pool_name: "color"
   use_sde : true
   sde_sample_freq : 16
 

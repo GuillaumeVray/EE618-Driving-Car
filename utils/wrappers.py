@@ -7,46 +7,86 @@ from sb3_contrib.common.wrappers import TimeFeatureWrapper  # noqa: F401 (backwa
 from scipy.signal import iirfilter, sosfilt, zpk2sos
 
 from .randaugment import *
+import time
+
 
 class AugmentationWrapper(gym.Wrapper):
     """Performs Data augmentation on observations
     """
-    def __init__(self, env: gym.Env, rand_aug_frequency : int, N: int, M:int, test : bool = False) -> None:
+    def __init__(self, env: gym.Env, rand_aug_frequency : int, pool_name : str = "full", 
+                N: int = 1,  M:int = 10, test : bool = False, track_augment : bool = False) -> None:
         super().__init__(env)
 
         self.n_samples = 0
         self.N, self.M = N, M
+        self.pool_name = pool_name
         self.rand_aug_frequency = rand_aug_frequency
         self.test = test
+        self.track_augment = track_augment
 
-        self.pool = [
-            (AutoContrast, 0, 1),
-            (Equalize, 0, 1),
-            (Invert, 0, 1),
-            # # (Rotate, 0, 30),
-            (Posterize, 0, 4),
-            (Solarize, 0, 256),
-            (SolarizeAdd, 0, 110),
-            (Color, 0.1, 1.9),
-            (Contrast, 0.1, 1.9),
-            (Brightness, 0.1, 1.9),
-            (Sharpness, 0.1, 1.9),
-            # (ShearX, 0., 0.3),
-            # (ShearY, 0., 0.3),
-            (Identity, 0., 1.),
-            (CutoutAbs, 0, 40),
-            (TranslateXabs, 0., 100),
-            (TranslateYabs, 0., 100),
-        ]
+        if self.pool_name == "full":
+
+            self.pool = [
+                (AutoContrast, 0, 1),
+                (Equalize, 0, 1),
+                (Invert, 0, 1),
+                (Posterize, 0, 4),
+                (Solarize, 0, 256),
+                (SolarizeAdd, 0, 110),
+                (Color, 0.1, 1.9),
+                (Contrast, 0.1, 1.9),
+                (Brightness, 0.1, 1.9),
+                (Sharpness, 0.1, 1.9),
+                (Identity, 0., 1.),
+                (CutoutAbs, 0, 40),
+                (TranslateXabs, 0., 100),
+                (TranslateYabs, 0., 100),
+            ]
+
+        elif self.pool_name == "cutout":
+
+            self.pool = [
+                (Identity, 0., 1.),
+                (CutoutAbs, 0, 40),
+            ]
+
+        elif self.pool_name == "cutout_translate":
+
+            self.pool = [
+                (Identity, 0., 1.),
+                (CutoutAbs, 0, 40),
+                (TranslateXabs, 0., 100),
+                (TranslateYabs, 0., 100),
+            ]
+
+        elif self.pool_name == "color":
+
+            self.pool = [
+                (AutoContrast, 0, 1),
+                (Equalize, 0, 1),
+                (Posterize, 0, 4),
+                (Solarize, 0, 256),
+                (Color, 0.1, 1.9),
+                (Contrast, 0.1, 1.9),
+                (Brightness, 0.1, 1.9),
+                (Identity, 0., 1.),
+                (CutoutAbs, 0, 40),
+            ]
 
         self.set_augmentation()
 
     def reset(self):
-        self.n_samples = 0
         return super().reset()
 
     def set_augmentation(self):
-        self.augmenter = random.choices(self.pool, k=self.N)
+        if self.track_augment:
+            
+            self.viewer.handler.send_exit_scene()
+            time.sleep(1)
+            self.viewer.handler.send_load_scene(self.viewer.handler.SceneToLoad)
+            time.sleep(2)
+        else:
+            self.augmenter = random.choices(self.pool, k=self.N)
 
     def augment(self, images):
         for op, minval, maxval in self.augmenter:
@@ -57,19 +97,27 @@ class AugmentationWrapper(gym.Wrapper):
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
 
+        # No augmentation at test
         if self.test:
             return obs, reward, done, info
-        obs_img = Image.fromarray(obs)
-        if self.n_samples % self.rand_aug_frequency == 0:
+
+        # Set Augmenter
+        if self.n_samples >= self.rand_aug_frequency and done:
             self.set_augmentation()
             self.n_samples = 0
         self.n_samples += 1
 
+        # track augmentation
+        if self.track_augment:
+            return obs, reward, done, info
+
+        # Image augmentation
+        obs_img = Image.fromarray(obs)
         aug_obs = self.augment(obs_img)
         aug_obs = np.array(aug_obs)
 
         return aug_obs, reward, done, info
-
+        
 
 class DoneOnSuccessWrapper(gym.Wrapper):
     """
@@ -269,6 +317,7 @@ class HistoryWrapper(gym.Wrapper):
         low_action = np.repeat(wrapped_action_space.low, horizon, axis=-1)
         high_action = np.repeat(wrapped_action_space.high, horizon, axis=-1)
 
+        print(low_action.shape, low_obs.shape)
         low = np.concatenate((low_obs, low_action))
         high = np.concatenate((high_obs, high_action))
 

@@ -26,7 +26,7 @@ def supply_defaults(conf: Dict[str, Any]) -> None:
         ("cam_resolution", (120, 160, 3)),
         ("log_level", logging.INFO),
         ("host", "localhost"),
-        ("port", 9091),
+        ("port", 9088),
     ]
 
     for key, val in defaults:
@@ -52,7 +52,7 @@ class DonkeyEnv(gym.Env):
     THROTTLE_MAX: float = 1.0
     VAL_PER_PIXEL: int = 255
 
-    def __init__(self, level: str, exe_path : str = None, conf: Optional[Dict[str, Any]] = None):
+    def __init__(self, level: str, exe_path : str = None, port : str = 9091, conf: Optional[Dict[str, Any]] = None):
         print("starting DonkeyGym env")
         self.viewer = None
         self.proc = None
@@ -61,6 +61,7 @@ class DonkeyEnv(gym.Env):
             conf = {}
 
         conf["level"] = level
+        conf["port"] = port
 
         # ensure defaults are supplied if missing.
         supply_defaults(conf)

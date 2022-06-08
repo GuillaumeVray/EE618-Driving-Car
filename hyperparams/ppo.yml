@@ -1,6 +1,6 @@
 
 donkey-generated-track-v0:
-  n_timesteps : !!float 2e6
+  n_timesteps : !!float 1e6
   policy : "CnnPolicy"
   learning_rate : !!float 3e-4
   batch_size : 64
@@ -12,7 +12,8 @@ donkey-generated-track-v0:
         max_episode_steps : 10000
     - utils.wrappers.AugmentationWrapper:
         rand_aug_frequency: 64
-        pool_name: "color"
+        pool_name : "color"
+        #track_augment : True
   use_sde : true
   sde_sample_freq : 16
 

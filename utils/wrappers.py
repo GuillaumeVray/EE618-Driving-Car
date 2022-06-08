@@ -23,6 +23,7 @@ class AugmentationWrapper(gym.Wrapper):
         self.rand_aug_frequency = rand_aug_frequency
         self.test = test
         self.track_augment = track_augment
+        self.pool = None
 
         if self.pool_name == "full":
 
@@ -85,7 +86,7 @@ class AugmentationWrapper(gym.Wrapper):
             time.sleep(1)
             self.viewer.handler.send_load_scene(self.viewer.handler.SceneToLoad)
             time.sleep(2)
-        else:
+        elif self.pool is not None:
             self.augmenter = random.choices(self.pool, k=self.N)
 
     def augment(self, images):
@@ -108,7 +109,7 @@ class AugmentationWrapper(gym.Wrapper):
         self.n_samples += 1
 
         # track augmentation
-        if self.track_augment:
+        if self.track_augment or self.pool is None:
             return obs, reward, done, info
 
         # Image augmentation
